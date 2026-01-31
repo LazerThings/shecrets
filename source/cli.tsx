@@ -15,21 +15,21 @@ import TuiApp from './tui/App.js';
 const cli = meow(
 	`
 	Usage
-	  $ shecrets init <file.she>
-	  $ shecrets keychain <file.she>
-	  $ shecrets <file.she> [options]
-	  $ shecrets <file.she>                (opens TUI browser)
+	  $ shecrets init <file.she>           Create a new encrypted secrets file
+	  $ shecrets keychain <file.she>       Save passphrase to OS keychain
+	  $ shecrets <file.she> [options]      Run a command on a secrets file
+	  $ shecrets <file.she>                Open interactive TUI browser
 
 	Options
 	  -c <name>              Create entry
 	  -l                     List entries
 	  -r <name>              Remove entry
-	  -eP <name>             Edit password
-	  -eU <name>             Edit username
-	  -uO <name>             Output username (stdout)
-	  -pO <name>             Output password (stdout)
-	  -uC <name>             Copy username to clipboard
-	  -pC <name>             Copy password to clipboard
+	  --eP <name>            Edit password
+	  --eU <name>            Edit username
+	  --uO <name>            Output username (stdout)
+	  --pO <name>            Output password (stdout)
+	  --uC <name>            Copy username to clipboard
+	  --pC <name>            Copy password to clipboard
 	  --enable-auto <name>   Enable auto mode
 	  --disable-auto <name>  Disable auto mode
 
@@ -37,7 +37,7 @@ const cli = meow(
 	  $ shecrets init secrets.she
 	  $ shecrets secrets.she -c "SSH Key"
 	  $ shecrets secrets.she -l
-	  $ shecrets secrets.she -pO "SSH Key"
+	  $ shecrets secrets.she --pO "SSH Key"
 	  $ shecrets secrets.she
 `,
 	{
@@ -94,9 +94,20 @@ async function main() {
 
 	const {flags} = cli;
 
+	function requireName(flag: string | undefined, flagName: string): string | undefined {
+		if (flag === undefined) return undefined;
+		if (!flag || flag === 'true') {
+			console.error(`Missing entry name for ${flagName}.`);
+			process.exit(1);
+		}
+
+		return flag;
+	}
+
 	// -c "Name" — create
-	if (flags.c !== undefined) {
-		await createCommand(filePath, flags.c);
+	const c = requireName(flags.c, '-c');
+	if (c) {
+		await createCommand(filePath, c);
 		return;
 	}
 
@@ -107,47 +118,53 @@ async function main() {
 	}
 
 	// -r "Name" — remove
-	if (flags.r !== undefined) {
-		await removeCommand(filePath, flags.r);
+	const r = requireName(flags.r, '-r');
+	if (r) {
+		await removeCommand(filePath, r);
 		return;
 	}
 
-	// -eP "Name" — edit password
-	if (flags.eP !== undefined) {
-		await editCommand(filePath, flags.eP, 'password');
+	// --eP "Name" — edit password
+	const eP = requireName(flags.eP, '--eP');
+	if (eP) {
+		await editCommand(filePath, eP, 'password');
 		return;
 	}
 
-	// -eU "Name" — edit username
-	if (flags.eU !== undefined) {
-		await editCommand(filePath, flags.eU, 'username');
+	// --eU "Name" — edit username
+	const eU = requireName(flags.eU, '--eU');
+	if (eU) {
+		await editCommand(filePath, eU, 'username');
 		return;
 	}
 
 	// Get operations
-	const getModes: Array<{flag: string | undefined; mode: GetMode}> = [
-		{flag: flags.uO, mode: 'uO'},
-		{flag: flags.pO, mode: 'pO'},
-		{flag: flags.uC, mode: 'uC'},
-		{flag: flags.pC, mode: 'pC'},
+	const getModes: Array<{flag: string | undefined; flagName: string; mode: GetMode}> = [
+		{flag: flags.uO, flagName: '--uO', mode: 'uO'},
+		{flag: flags.pO, flagName: '--pO', mode: 'pO'},
+		{flag: flags.uC, flagName: '--uC', mode: 'uC'},
+		{flag: flags.pC, flagName: '--pC', mode: 'pC'},
 	];
 
-	for (const {flag, mode} of getModes) {
-		if (flag !== undefined) {
-			await getCommand(filePath, flag, mode);
+	for (const {flag, flagName, mode} of getModes) {
+		const name = requireName(flag, flagName);
+		if (name) {
+			await getCommand(filePath, name, mode);
 			return;
 		}
 	}
 
 	// --enable-auto "Name"
-	if (flags.enableAuto !== undefined) {
-		await autoCommand(filePath, flags.enableAuto, true);
+	const enableAuto = requireName(flags.enableAuto, '--enable-auto');
+	if (enableAuto) {
+		await autoCommand(filePath, enableAuto, true);
 		return;
 	}
 
 	// --disable-auto "Name"
-	if (flags.disableAuto !== undefined) {
-		await autoCommand(filePath, flags.disableAuto, false);
+	const disableAuto = requireName(flags.disableAuto, '--disable-auto');
+	if (disableAuto) {
+		await autoCommand(filePath, disableAuto, false);
 		return;
 	}
 

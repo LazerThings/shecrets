@@ -33,7 +33,11 @@ export async function getCommand(
 	}
 
 	if (mode.endsWith('O')) {
-		process.stdout.write(value);
+		if (process.stdout.isTTY) {
+			console.log(value);
+		} else {
+			process.stdout.write(value);
+		}
 	} else {
 		await copyToClipboard(value);
 		console.error(`${fieldLabel} copied to clipboard.`);

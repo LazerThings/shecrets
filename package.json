@@ -26,7 +26,7 @@
 		"node": ">=16"
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc && chmod +x dist/cli.js",
 		"dev": "tsc --watch",
 		"test": "prettier --check . && xo && ava"
 	},

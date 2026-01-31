@@ -33,7 +33,7 @@ shecrets passwords.she -c "AWS Production"
 shecrets passwords.she -l
 
 # Copy password to clipboard
-shecrets passwords.she -pC "AWS Production"
+shecrets passwords.she --pC "AWS Production"
 
 # Open the interactive TUI browser
 shecrets passwords.she
@@ -92,25 +92,25 @@ Lists all entry names. Entries with auto mode enabled are marked `[auto]`.
 
 ```bash
 # Output to stdout
-shecrets <file.she> -uO "Entry Name"   # username
-shecrets <file.she> -pO "Entry Name"   # password
+shecrets <file.she> --uO "Entry Name"   # username
+shecrets <file.she> --pO "Entry Name"   # password
 
 # Copy to clipboard
-shecrets <file.she> -uC "Entry Name"   # username
-shecrets <file.she> -pC "Entry Name"   # password
+shecrets <file.she> --uC "Entry Name"   # username
+shecrets <file.she> --pC "Entry Name"   # password
 ```
 
 By default, get operations require interactive confirmation (`y/N` prompt). If the entry has **auto mode** enabled, the confirmation is skipped, which enables piping:
 
 ```bash
-shecrets server.she -pO "SSH Root" | sshpass ssh root@server
+shecrets server.she --pO "SSH Root" | sshpass ssh root@server
 ```
 
 ### Edit an entry
 
 ```bash
-shecrets <file.she> -eU "Entry Name"   # edit username
-shecrets <file.she> -eP "Entry Name"   # edit password
+shecrets <file.she> --eU "Entry Name"   # edit username
+shecrets <file.she> --eP "Entry Name"   # edit password
 ```
 
 ### Remove an entry

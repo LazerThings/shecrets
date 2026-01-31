@@ -1,6 +1,6 @@
 {
 	"name": "shecrets",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Encrypted secrets files safe to commit. AES-256-GCM + Argon2id, CLI + TUI browser, keychain integration.",
 	"license": "MIT",
 	"author": "LazerThings",

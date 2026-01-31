@@ -111,14 +111,14 @@ export default function EntryDetail({entry, db, cryptoKey, onBack}: Props) {
 
 		if (input === 'u') {
 			copyToClipboard(entry.username).then(() => {
-				setStatus('username copied');
+				setStatus('username copied (45s)');
 			});
 			return;
 		}
 
 		if (input === 'p') {
 			copyToClipboard(entry.password).then(() => {
-				setStatus('password copied');
+				setStatus('password copied (45s)');
 			});
 			return;
 		}

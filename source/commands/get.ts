@@ -40,6 +40,6 @@ export async function getCommand(
 		}
 	} else {
 		await copyToClipboard(value);
-		console.error(`${fieldLabel} copied to clipboard.`);
+		console.error(`${fieldLabel} copied to clipboard. Will clear in 45s.`);
 	}
 }

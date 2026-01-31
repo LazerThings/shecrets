@@ -8,7 +8,10 @@ Each `.she` file is a self-contained SQLite3 database where every secret field i
 
 ```bash
 pnpm add -g shecrets
+pnpm approve-builds -g
 ```
+
+> **Note:** shecrets depends on native modules (`argon2`, `better-sqlite3`) that need to compile during install. The second command allows their build scripts to run.
 
 ### From source
 

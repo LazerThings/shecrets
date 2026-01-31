@@ -2,7 +2,7 @@
 	"name": "shecrets",
 	"version": "0.0.3",
 	"description": "Encrypted secrets files safe to commit. AES-256-GCM + Argon2id, CLI + TUI browser, keychain integration.",
-	"license": "MIT",
+	"license": "BSD-2-Clause",
 	"author": "LazerThings",
 	"repository": {
 		"type": "git",
